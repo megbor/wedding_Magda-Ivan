@@ -26,6 +26,16 @@ document.querySelectorAll('.nav__mobile-link').forEach(link => {
   });
 });
 
+// Close mobile menu when tapping outside
+document.addEventListener('click', (e) => {
+  if (mobileMenu.classList.contains('is-open') &&
+      !mobileMenu.contains(e.target) &&
+      !hamburger.contains(e.target)) {
+    mobileMenu.classList.remove('is-open');
+    hamburger.setAttribute('aria-expanded', false);
+  }
+});
+
 /* --- Countdown -------------------------------------------- */
 const WEDDING_DATE = new Date('2026-09-25T11:00:00+02:00');
 
