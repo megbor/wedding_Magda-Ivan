@@ -13,27 +13,37 @@ window.addEventListener('scroll', () => {
 const hamburger  = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 
+function closeMobileMenu() {
+  mobileMenu.classList.remove('is-open');
+  mobileOverlay.classList.remove('is-open');
+  hamburger.setAttribute('aria-expanded', false);
+}
+
 hamburger.addEventListener('click', () => {
   const isOpen = mobileMenu.classList.toggle('is-open');
+  mobileOverlay.classList.toggle('is-open', isOpen);
   hamburger.setAttribute('aria-expanded', isOpen);
 });
 
-// Close mobile menu when a link is tapped
-document.querySelectorAll('.nav__mobile-link').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.remove('is-open');
-    hamburger.setAttribute('aria-expanded', false);
-  });
-});
-
-// Close mobile menu when tapping outside
+// Close when tapping outside
+document.addEventListener('touchstart', (e) => {
+  if (mobileMenu.classList.contains('is-open') &&
+      !mobileMenu.contains(e.target) &&
+      !hamburger.contains(e.target)) {
+    closeMobileMenu();
+  }
+}, { passive: true });
 document.addEventListener('click', (e) => {
   if (mobileMenu.classList.contains('is-open') &&
       !mobileMenu.contains(e.target) &&
       !hamburger.contains(e.target)) {
-    mobileMenu.classList.remove('is-open');
-    hamburger.setAttribute('aria-expanded', false);
+    closeMobileMenu();
   }
+});
+
+// Close when a link is tapped
+document.querySelectorAll('.nav__mobile-link').forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
 });
 
 /* --- Countdown -------------------------------------------- */
